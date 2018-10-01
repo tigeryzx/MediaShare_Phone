@@ -8,7 +8,7 @@
 
   <ion-navbar>
     <ion-title>
-      {{title}} (<span *ngIf="videoPageRequest">{{loadCount}}</span>/<span *ngIf="videoPageResult">{{videoPageResult.totalCount}}</span>)
+      {{title}} (<span>{{videoList.length}}</span>/<span>{{videoTotalCount}}</span>)
     </ion-title>
 
     <ion-buttons end>
@@ -23,24 +23,24 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="videoPageResult==null || videoPageResult.totalCount <= 0">
+  <div *ngIf="videoList.length <= 0">
     <span>没找到视频哦!</span>
   </div>
-  <div *ngIf="videoPageResult!=null && videoPageResult.totalCount > 0">
+  <div *ngIf="videoList.length > 0">
 
-    <ion-card *ngFor="let video of videoPageResult.items" (click)="showVideoInfo(video)">
-      <img src="../../assets/imgs/video-default.png" />
+    <ion-card *ngFor="let video of videoList" (click)="showVideoInfo(video)">
+      <img [src]="video.coverUrl" />
       <ion-card-content>
         <ion-card-title>
           {{video.fileName}}
-          <div class="sub-title">{{video.appendDate}}</div>
+          <div class="sub-title">{{video.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{video.viewCount}} 播放:{{video.playCount}}</div>
         </ion-card-title>
         <div *ngIf="video.favorite">
           <ion-badge *ngFor="let fav of video.favorite" color="secondary">{{fav.categoryName}}</ion-badge>
         </div>
       </ion-card-content>
     </ion-card>
-    <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="enableScrollLoad">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>

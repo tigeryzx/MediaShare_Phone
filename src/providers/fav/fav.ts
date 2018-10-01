@@ -18,7 +18,9 @@ export class FavProvider {
   private favList: Favorite[] = [];
   favList$: Subject<Favorite[]> = new Subject<Favorite[]>();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+  ) {
     console.log('Hello FavProvider Provider');
   }
 
@@ -30,6 +32,19 @@ export class FavProvider {
         this.favList = result.items;
         this.favList$.next(this.favList);
       });
+  }
+
+  getFavList(): Promise<Favorite[]> {
+    return new Promise((resolve) => {
+      if (this.favList.length > 0) {
+        resolve(this.favList);
+      } else {
+        this.loadFavList();
+        this.favList$.subscribe(x=>{
+          resolve(x);
+        });
+      }
+    });
   }
 
   createFav(favName: string, callback: (result: ApiResult<any>) => void): void {

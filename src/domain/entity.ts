@@ -15,6 +15,7 @@ export class Image {
     height: number;
     isCover: boolean;
     id: number;
+    url: string;
 
     constructor() { }
 }
@@ -26,6 +27,9 @@ export class Video {
     ftpPath: string;
     appendDate: Date;
     id: number;
+    coverUrl: string;
+    viewCount: number;
+    playCount: number;
 
     constructor() {
 
@@ -82,6 +86,9 @@ export class VideoPageRequest {
     favId: number;
     skipCount: number = 0;
     maxResultCount: number = 10;
+    isHotPlay: boolean;
+    isLatePlay: boolean;
+    isHistoryView: boolean;
 }
 
 export class FavoriteVideoChangeRequest {
@@ -90,4 +97,35 @@ export class FavoriteVideoChangeRequest {
     }
     videoId: number;
     favIds: number[];
+}
+
+export class VideoCoverSetting {
+    constructor(videoId: number, imageId: number) {
+        this.videoId = videoId;
+        this.imageId = imageId;
+    }
+
+    videoId: number;
+    imageId: number;
+}
+
+export class LuckVideoRequest {
+
+    constructor() {
+
+    }
+
+    favId: number;
+    inAllVideo: boolean;
+    inAllFav: boolean;
+    inSingleFav: boolean;
+}
+
+export class VideoViewRequest {
+    constructor() {
+
+    }
+
+    videoId: number;
+    isPlay: boolean;
 }

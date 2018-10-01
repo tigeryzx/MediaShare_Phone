@@ -7,20 +7,21 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>视频内容</ion-title>
+    <ion-title>视频详情</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <div class="video-info-content">
+  <div *ngIf="currentVideo" class="video-info-content">
 
     <ion-card>
-      <img src="../../assets/imgs/video-default.png">
+      <img [src]="currentVideo.coverUrl">
       <ion-card-content>
         <ion-card-title>
           {{currentVideo.fileName}}
+          <div class="sub-title">{{currentVideo.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{currentVideo.viewCount}} 播放:{{currentVideo.playCount}}</div>
         </ion-card-title>
         <ion-row no-padding>
           <ion-col>
@@ -52,7 +53,7 @@
     </ion-card>
 
     <ion-card *ngFor="let img of currentVideo.images" (press)="showMenu(img)">
-      <img src="../../assets/imgs/video-default.png">
+      <img [src]="img.url">
     </ion-card>
 
   </div>

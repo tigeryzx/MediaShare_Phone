@@ -1,0 +1,36 @@
+<!-- Generated template for the VideoCardComponent component -->
+<ion-card>
+    <img [src]="video.coverUrl">
+    <ion-card-content>
+      <ion-card-title>
+        {{video.fileName}}
+        <div class="sub-title">{{video.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{video.viewCount}} 播放:{{video.playCount}}</div>
+      </ion-card-title>
+      <ion-row no-padding>
+        <ion-col>
+          <button ion-button clear color="danger" block icon-start (click)="play()">
+            <ion-icon name='play'></ion-icon>
+            播放
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear color="danger" block icon-start (click)="addToFav()">
+            <ion-icon name='star'></ion-icon>
+            收藏
+          </button>
+          <fav-select [video]="video"></fav-select>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear color="danger" block icon-start (click)="delete()">
+            <ion-icon name='trash'></ion-icon>
+            删除
+          </button>
+        </ion-col>
+
+      </ion-row>
+      <div *ngIf="video.favorite">
+        <ion-badge *ngFor="let fav of video.favorite" color="secondary">{{fav.categoryName}}</ion-badge>
+      </div>
+
+    </ion-card-content>
+  </ion-card>

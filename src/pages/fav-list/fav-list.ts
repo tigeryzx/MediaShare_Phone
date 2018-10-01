@@ -3,7 +3,9 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { FavInfoPage } from '../fav-info/fav-info';
 import { VideoListPage } from '../video-list/video-list';
 import { FavProvider } from '../../providers/fav/fav';
-import { Favorite } from '../../domain/entity';
+import { Favorite, LuckVideoRequest } from '../../domain/entity';
+import { VideoInfoPage } from '../video-info/video-info';
+import { VideoProvider } from '../../providers/video/video';
 
 /**
  * Generated class for the FavListPage page.
@@ -24,6 +26,7 @@ export class FavListPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public favProvider: FavProvider,
+    private videoProvider: VideoProvider,
     public alertCtrl: AlertController) {
   }
 
@@ -50,6 +53,16 @@ export class FavListPage {
 
   addNewFav(): void {
     this.navCtrl.push(FavInfoPage);
+  }
+
+  getLuckVideo(): void {
+    let luckParam = new LuckVideoRequest();
+    luckParam.inAllFav = true;
+    this.videoProvider.getLuckVideo(luckParam)
+      .subscribe(video => {
+        this.videoProvider.setCurrentVideo(video);
+        this.navCtrl.push(VideoInfoPage);
+      });
   }
 
   deleteFav(fav: Favorite): void {

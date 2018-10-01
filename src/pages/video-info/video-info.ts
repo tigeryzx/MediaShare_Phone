@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
 import { FavSelectComponent } from '../../components/fav-select/fav-select';
-import { Video, Image } from '../../domain/entity';
+import { Video, Image, VideoCoverSetting } from '../../domain/entity';
 import { VideoProvider } from '../../providers/video/video';
 
 /**
@@ -30,21 +30,27 @@ export class VideoInfoPage {
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
     private videoProvider: VideoProvider) {
-
-    this.currentVideo = navParams.get('video') as Video;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad VideoInfoPage');
+    this.currentVideo = this.videoProvider.getCurrentVideo();
+    this.videoProvider.viewCurrentVideo().subscribe();
   }
 
   showMenu(image: Image): void {
+
+    if (image.isStoryCascade)
+      return;
+
     const actionSheet = this.actionSheetCtrl.create({
       buttons: [
         {
           text: '设为封面',
           handler: () => {
             console.log('Destructive clicked');
+            var param = new VideoCoverSetting(this.currentVideo.id, image.id);
+            this.videoProvider.setVideoCover(param);
           }
         }
       ]
@@ -67,9 +73,8 @@ export class VideoInfoPage {
           text: '确认',
           handler: () => {
             this.videoProvider.deleteVideo(this.currentVideo.id)
-              .subscribe(x => {
+              .then(x => {
                 this.navCtrl.pop();
-                // TODO: 移除列表中的视频信息
               });
           }
         }
@@ -79,7 +84,10 @@ export class VideoInfoPage {
   }
 
   play(): void {
-    window.location.href = 'nplayer-ftp://' + encodeURI(this.currentVideo.ftpPath.replace("ftp://", ""));
+    this.videoProvider.playCurrentVideo()
+      .subscribe(x => {
+        window.location.href = 'nplayer-ftp://' + encodeURI(this.currentVideo.ftpPath.replace("ftp://", ""));
+      });
   }
 
   addToFav(): void {

@@ -36,11 +36,6 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
       });
     }
 
-    this.favProvider.favList$
-      .subscribe(result => {
-        this.favs = result;
-      });
-    this.favProvider.loadFavList();
   }
 
   ngOnDestroy(): void {
@@ -48,6 +43,14 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   open(): void {
+    this.favProvider.getFavList()
+      .then(x => {
+        this.favs = x;
+        this.showFavList();
+      });
+  }
+
+  showFavList(): void {
     let alert = this.alertCtrl.create();
     alert.setTitle('选择收藏夹');
 
@@ -111,6 +114,5 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
     });
 
     alert.present();
-
   }
 }

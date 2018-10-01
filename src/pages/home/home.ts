@@ -5,6 +5,9 @@ import { VideoListPage } from '../video-list/video-list';
 import { FavListPage } from '../fav-list/fav-list';
 import { LocalStorgeProvider } from '../../providers/local-storge/local-storage';
 import { USER_INFO } from '../../providers/local-storge/local-storage.namespace';
+import { LuckVideoRequest } from '../../domain/entity';
+import { VideoProvider } from '../../providers/video/video';
+import { VideoInfoPage } from '../video-info/video-info';
 
 /**
  * Generated class for the HomePage page.
@@ -21,6 +24,7 @@ export class HomePage {
 
   constructor(
     public localStorage: LocalStorgeProvider,
+    private videoProvider: VideoProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController) {
@@ -28,6 +32,35 @@ export class HomePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
+  }
+
+  powerOff(): void {
+    const confirm = this.alertCtrl.create({
+      title: '提示',
+      message: '多少久后关闭系统(秒)?',
+      inputs: [
+        {
+          name: '秒(s)',
+          placeholder: '请输入秒数',
+          value:'10'
+        }
+      ],
+      buttons: [
+        {
+          text: '取消',
+          handler: () => {
+
+          }
+        },
+        {
+          text: '确认',
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   longout(): void {
@@ -57,10 +90,38 @@ export class HomePage {
   }
 
   videoList(): void {
-    this.navCtrl.push(VideoListPage, { title: '所有视频' });
+    this.openVideoList(null);
+  }
+
+  videoListByHot(): void {
+    this.openVideoList('hot');
+  }
+
+  videoListByLast(): void {
+    this.openVideoList('last');
+  }
+
+  videoListByHistory(): void {
+    this.openVideoList('history');
+  }
+
+  private openVideoList(loadType: string): void {
+    this.navCtrl.push(VideoListPage, {
+      type: loadType
+    });
   }
 
   favList(): void {
     this.navCtrl.push(FavListPage);
+  }
+
+  getLuckVideo(): void {
+    let luckParam = new LuckVideoRequest();
+    luckParam.inAllVideo = true;
+    this.videoProvider.getLuckVideo(luckParam)
+      .subscribe(video => {
+        this.videoProvider.setCurrentVideo(video);
+        this.navCtrl.push(VideoInfoPage);
+      });
   }
 }
