@@ -13,7 +13,6 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { VideoInfoPage } from '../pages/video-info/video-info';
 import { VideoListPage } from '../pages/video-list/video-list';
-import { FavSelectComponent } from '../components/fav-select/fav-select';
 import { FavListPage } from '../pages/fav-list/fav-list';
 import { FavInfoPage } from '../pages/fav-info/fav-info';
 import { VideoProvider } from '../providers/video/video';
@@ -23,6 +22,9 @@ import { InterceptorService } from '../interceptor/http-interceptor-service';
 import { LocalStorgeProvider } from '../providers/local-storge/local-storage';
 import { HttpHelper } from '../util/http-helper';
 import { FavProvider } from '../providers/fav/fav';
+import { ComponentsModule } from '../components/components.module';
+import { DateHelper } from '../util/date-helper';
+import { SysProvider } from '../providers/sys/sys';
 
 @NgModule({
   declarations: [
@@ -35,13 +37,12 @@ import { FavProvider } from '../providers/fav/fav';
     VideoListPage,
     VideoInfoPage,
     FavListPage,
-    FavInfoPage,
-
-    FavSelectComponent
+    FavInfoPage
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
+    ComponentsModule,
     IonicModule.forRoot(MyApp, {
       backButtonText: "返回"
     }),
@@ -69,7 +70,9 @@ import { FavProvider } from '../providers/fav/fav';
     UserProvider,
     LocalStorgeProvider,
     HttpHelper,
-    FavProvider
+    FavProvider,
+    DateHelper,
+    SysProvider
   ]
 })
 export class AppModule { }

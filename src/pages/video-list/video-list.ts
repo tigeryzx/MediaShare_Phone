@@ -4,7 +4,7 @@ import { VideoInfoPage } from '../video-info/video-info';
 import { VideoProvider } from '../../providers/video/video';
 import { VideoPageRequest, Video, Favorite, LuckVideoRequest } from '../../domain/entity';
 import { Subject } from 'rxjs/Subject';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, zip } from 'rxjs/operators';
 
 /**
  * Generated class for the VideoListPage page.
@@ -70,14 +70,16 @@ export class VideoListPage implements OnDestroy {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad VideoListPage');
-    this.videoProvider.videoList$
-      .subscribe(videoList => {
+
+    zip(this.videoProvider.videoTotalCount$, this.videoProvider.videoList$)
+      (this.videoProvider.videoList$)
+      .subscribe(x => {
+        let videoList = x["2"];
+        let videoTotalCount = x["1"];
         this.videoList = videoList;
-        this.scrollComplete();
-      });
-    this.videoProvider.videoTotalCount$
-      .subscribe(videoTotalCount => {
         this.videoTotalCount = videoTotalCount;
+        console.log('zip...');
+        this.scrollComplete();
       });
 
     this.searchTerms$.pipe(
@@ -98,7 +100,7 @@ export class VideoListPage implements OnDestroy {
       this.infiniteScroll.complete();
       this.infiniteScroll = null;
     }
-    this.enableScrollLoad = this.videoList.length <= this.videoTotalCount;
+    this.enableScrollLoad = this.videoList.length < this.videoTotalCount;
   }
 
   loadPageData(): void {

@@ -6,7 +6,7 @@
         {{video.fileName}}
         <div class="sub-title">{{video.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{video.viewCount}} 播放:{{video.playCount}}</div>
       </ion-card-title>
-      <ion-row no-padding>
+      <ion-row no-padding *ngIf="showActionButton">
         <ion-col>
           <button ion-button clear color="danger" block icon-start (click)="play()">
             <ion-icon name='play'></ion-icon>

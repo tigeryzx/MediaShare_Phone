@@ -12,45 +12,10 @@
 
 </ion-header>
 
-
 <ion-content padding>
   <div *ngIf="currentVideo" class="video-info-content">
 
-    <ion-card>
-      <img [src]="currentVideo.coverUrl">
-      <ion-card-content>
-        <ion-card-title>
-          {{currentVideo.fileName}}
-          <div class="sub-title">{{currentVideo.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{currentVideo.viewCount}} 播放:{{currentVideo.playCount}}</div>
-        </ion-card-title>
-        <ion-row no-padding>
-          <ion-col>
-            <button ion-button clear color="danger" block icon-start (click)="play()">
-              <ion-icon name='play'></ion-icon>
-              播放
-            </button>
-          </ion-col>
-          <ion-col>
-            <button ion-button clear color="danger" block icon-start (click)="addToFav()">
-              <ion-icon name='star'></ion-icon>
-              收藏
-            </button>
-            <fav-select [video]="currentVideo"></fav-select>
-          </ion-col>
-          <ion-col>
-            <button ion-button clear color="danger" block icon-start (click)="delete()">
-              <ion-icon name='trash'></ion-icon>
-              删除
-            </button>
-          </ion-col>
-
-        </ion-row>
-        <div *ngIf="currentVideo.favorite">
-          <ion-badge *ngFor="let fav of currentVideo.favorite" color="secondary">{{fav.categoryName}}</ion-badge>
-        </div>
-
-      </ion-card-content>
-    </ion-card>
+    <video-card [video]="currentVideo" [showActionButton]="true" (afterDelete)="afterDelete()"></video-card>
 
     <ion-card *ngFor="let img of currentVideo.images" (press)="showMenu(img)">
       <img [src]="img.url">

@@ -27,19 +27,7 @@
     <span>没找到视频哦!</span>
   </div>
   <div *ngIf="videoList.length > 0">
-
-    <ion-card *ngFor="let video of videoList" (click)="showVideoInfo(video)">
-      <img [src]="video.coverUrl" />
-      <ion-card-content>
-        <ion-card-title>
-          {{video.fileName}}
-          <div class="sub-title">{{video.appendDate | date:'yyyy年MM月dd日 HH:mm:ss'}} 浏览:{{video.viewCount}} 播放:{{video.playCount}}</div>
-        </ion-card-title>
-        <div *ngIf="video.favorite">
-          <ion-badge *ngFor="let fav of video.favorite" color="secondary">{{fav.categoryName}}</ion-badge>
-        </div>
-      </ion-card-content>
-    </ion-card>
+    <video-card [video]="video" *ngFor="let video of videoList" (click)="showVideoInfo(video)"></video-card>
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="enableScrollLoad">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>

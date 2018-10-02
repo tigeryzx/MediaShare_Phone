@@ -27,7 +27,13 @@ export class UserProvider {
   login(loginInfo: LoginInfo): Observable<UserInfo> {
     return this.http.post<ApiResult<UserInfo>>(USER_LOGIN, loginInfo, httpOptions)
       .pipe(
-        map(result => result.result)
+        map(result => {
+          var userInfo = result.result;
+          var expireDate = new Date();
+          expireDate.setSeconds(expireDate.getSeconds() + userInfo.expireInSeconds - 10);
+          userInfo.expireDate = expireDate;
+          return userInfo;
+        })
       );
   }
 }

@@ -8,6 +8,7 @@ import { USER_INFO } from '../../providers/local-storge/local-storage.namespace'
 import { LuckVideoRequest } from '../../domain/entity';
 import { VideoProvider } from '../../providers/video/video';
 import { VideoInfoPage } from '../video-info/video-info';
+import { SysProvider } from '../../providers/sys/sys';
 
 /**
  * Generated class for the HomePage page.
@@ -27,7 +28,8 @@ export class HomePage {
     private videoProvider: VideoProvider,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private sysProvider: SysProvider) {
   }
 
   ionViewDidLoad() {
@@ -37,12 +39,12 @@ export class HomePage {
   powerOff(): void {
     const confirm = this.alertCtrl.create({
       title: '提示',
-      message: '多少久后关闭系统(秒)?',
+      message: '多少久后关闭系统(分)?',
       inputs: [
         {
-          name: '秒(s)',
+          name: 'minute',
           placeholder: '请输入秒数',
-          value:'10'
+          value: '1'
         }
       ],
       buttons: [
@@ -54,8 +56,17 @@ export class HomePage {
         },
         {
           text: '确认',
-          handler: () => {
-
+          handler: (data) => {
+            //TODO: 取消关机功能
+            var second = parseInt(data.minute) * 60;
+            this.sysProvider.shutdownServer(second)
+              .subscribe(x => {
+                this.alertCtrl.create({
+                  title: '提示',
+                  subTitle: `系统将大约在${data.minute}分后关机。`,
+                  buttons: ['知道了']
+                }).present();
+              });
           }
         }
       ]

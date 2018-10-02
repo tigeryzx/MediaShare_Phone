@@ -15,4 +15,6 @@ export const FAV_DELETE = BASE_API_ROOT + '/services/app/Fav/Delete';
 export const FAV_LIKE_VIDEO = BASE_API_ROOT + '/services/app/Fav/FavoriteVideo';
 export const FAV_UNLIKE_VIDEO = BASE_API_ROOT + '/services/app/Fav/UnFavoriteVideo';
 
+export const SYS_SHUTDOWN_SERVER = BASE_API_ROOT + '/services/app/Sys/ShutDownServer';
+
 export const IMG_GETIMAGE = BASE_API_ROOT + '/Image/GetImage';

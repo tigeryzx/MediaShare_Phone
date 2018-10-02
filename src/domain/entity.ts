@@ -62,6 +62,7 @@ export class UserInfo {
     expireInSeconds: number;
     userId: number;
     userName: string;
+    expireDate: Date;
 
     constructor() {
 

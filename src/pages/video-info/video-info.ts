@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import { FavSelectComponent } from '../../components/fav-select/fav-select';
 import { Video, Image, VideoCoverSetting } from '../../domain/entity';
 import { VideoProvider } from '../../providers/video/video';
@@ -28,7 +28,6 @@ export class VideoInfoPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
-    public alertCtrl: AlertController,
     private videoProvider: VideoProvider) {
   }
 
@@ -58,39 +57,7 @@ export class VideoInfoPage {
     actionSheet.present();
   }
 
-  delete(): void {
-    const confirm = this.alertCtrl.create({
-      title: '删除视频',
-      message: '删除后会将源文件也删除，确认操作吗?',
-      buttons: [
-        {
-          text: '取消',
-          handler: () => {
-            console.log('Disagree clicked');
-          }
-        },
-        {
-          text: '确认',
-          handler: () => {
-            this.videoProvider.deleteVideo(this.currentVideo.id)
-              .then(x => {
-                this.navCtrl.pop();
-              });
-          }
-        }
-      ]
-    });
-    confirm.present();
-  }
-
-  play(): void {
-    this.videoProvider.playCurrentVideo()
-      .subscribe(x => {
-        window.location.href = 'nplayer-ftp://' + encodeURI(this.currentVideo.ftpPath.replace("ftp://", ""));
-      });
-  }
-
-  addToFav(): void {
-    this.favSelect.open();
+  afterDelete(): void {
+    this.navCtrl.pop();
   }
 }
