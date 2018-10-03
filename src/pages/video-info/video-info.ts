@@ -15,7 +15,7 @@ import { VideoProvider } from '../../providers/video/video';
   selector: 'page-video-info',
   templateUrl: 'video-info.html',
 })
-export class VideoInfoPage {
+export class VideoInfoPage{
 
   @ViewChild(FavSelectComponent)
   favSelect: FavSelectComponent;

@@ -26,13 +26,19 @@ export class LoginPage {
     ) {
         this.loginType = navParams.get('loginType');
         if (this.loginType == 'relogin') {
-            const toast = this.toastCtrl.create({
-                message: '登录过期，请重新登录',
-                duration: 4000,
-                position: 'top'
-            });
-            toast.present();
+            this.showMsg('登录过期，请重新登录');
+        } else if (this.loginType == 'shutdown') {
+            this.showMsg('系统即将关闭了，就不要登录了。');
         }
+    }
+
+    showMsg(msg: string): void {
+        const toast = this.toastCtrl.create({
+            message: msg,
+            duration: 4000,
+            position: 'top'
+        });
+        toast.present();
     }
 
     ionViewDidLoad() {

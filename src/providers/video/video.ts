@@ -6,6 +6,7 @@ import { VIDEO_GET_ALL, VIDEO_DELETE, VIDEO_SET_COVER, IMG_GETIMAGE, VIDEO_GET_L
 import { map } from 'rxjs/operators';
 import { HttpHelper } from '../../util/http-helper';
 import { Subject } from 'rxjs/Subject';
+import { ENV } from "@app/env";
 
 /*
   Generated class for the VideoProvider provider.
@@ -112,7 +113,9 @@ export class VideoProvider {
   getVideoImageUrl(imageId: number): string {
     var maxWidth = window.document.body.clientWidth;
     let url = IMG_GETIMAGE + `?imageId=${imageId}&maxWidth=${maxWidth}`;
-    url = '../../assets/imgs/video-default.png';
+    // 开发环境中使用测试图片
+    if (ENV.mode == 'dev')
+      url = '../../assets/imgs/video-default.png';
     return url;
   }
 

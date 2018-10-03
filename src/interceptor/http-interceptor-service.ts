@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from "@angular/common/http";
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { mergeMap } from 'rxjs/operators';
 import { LoadingController, Loading, AlertController, NavController, App } from 'ionic-angular';
 import { LocalStorgeProvider } from '../providers/local-storge/local-storage';
@@ -26,8 +26,26 @@ export class InterceptorService implements HttpInterceptor {
 
     }
 
+    showLoading(method: string): void {
+        if (method.toUpperCase() != 'OPTIONS' && this.loader == null) {
+            this.loader = this.loadingCtrl.create({
+                content: "请稍候..."
+            });
+            this.loader.present();
+            console.log('show on ' + method);
+        }
+    }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    hideLoading(method: string): void {
+        if (method.toUpperCase() != 'OPTIONS' && this.loader) {
+            this.loader.dismiss();
+            console.log('hide on ' + method);
+            this.loader = null;
+        }
+    }
+
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
         let authReq: HttpRequest<any> = req;
 
         const userInfo = this.localstorage.get<UserInfo>(USER_INFO);
@@ -44,32 +62,22 @@ export class InterceptorService implements HttpInterceptor {
             }
         }
 
-        if (req.method.toUpperCase() != 'OPTIONS' && this.loader == null) {
-            this.loader = this.loadingCtrl.create({
-                content: "请稍候..."
-            });
-            this.loader.present();
-        }
+        this.showLoading(req.method);
 
-        return next.handle(authReq).pipe(mergeMap((event: any) => {
+        return next.handle(authReq).pipe(
+            mergeMap((event: any) => {
 
-            if (req.method.toUpperCase() != 'OPTIONS') {
-                if (this.loader) {
-                    if (this.loader._state == 1) {
-                        this.loader.dismiss();
-                    }
-                    this.loader = null;
+                if (event instanceof HttpResponse) {
+                    this.hideLoading(authReq.method);
+                    if (event.status != 200)
+                        return ErrorObservable.create(event);
                 }
-            }
-
-            if (event instanceof HttpResponse && event.status != 200) {
-                return ErrorObservable.create(event);
-            }
-            return Observable.create(observer => {
-                observer.next(event);
-            }); //请求成功返回响应
-        }),
+                return Observable.create(observer => {
+                    observer.next(event);
+                }); //请求成功返回响应
+            }),
             catchError((res: HttpErrorResponse) => {   //请求失败处理
+                this.hideLoading(authReq.method);
                 let msg = '请求失败';
                 switch (res.status) {
                     case 0: {
@@ -101,6 +109,9 @@ export class InterceptorService implements HttpInterceptor {
                 }).present();
 
                 return ErrorObservable.create(event);
+            }),
+            finalize(() => {
+                this.hideLoading(req.method);
             }));
     }
 }

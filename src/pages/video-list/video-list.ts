@@ -4,7 +4,7 @@ import { VideoInfoPage } from '../video-info/video-info';
 import { VideoProvider } from '../../providers/video/video';
 import { VideoPageRequest, Video, Favorite, LuckVideoRequest } from '../../domain/entity';
 import { Subject } from 'rxjs/Subject';
-import { debounceTime, distinctUntilChanged, zip } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, zip, takeUntil } from 'rxjs/operators';
 
 /**
  * Generated class for the VideoListPage page.
@@ -36,6 +36,7 @@ export class VideoListPage implements OnDestroy {
   videoTotalCount: number = 0;
 
   private searchTerms$ = new Subject<string>();
+  private destory$ = new Subject();
 
   constructor(
     public navCtrl: NavController,
@@ -58,6 +59,9 @@ export class VideoListPage implements OnDestroy {
       } else if (loadType == 'history') {
         this.title = '最近查看';
         this.videoPageRequest.isHistoryView = true;
+      } else if (loadType == 'random') {
+        this.title = '随便看看';
+        this.videoPageRequest.isRandomList = true;
       }
     }
 
@@ -65,6 +69,7 @@ export class VideoListPage implements OnDestroy {
 
   ngOnDestroy(): void {
     this.videoProvider.clearVideoList();
+    this.destory$.next();
     console.log('OnDestroy video list');
   }
 
@@ -73,16 +78,17 @@ export class VideoListPage implements OnDestroy {
 
     zip(this.videoProvider.videoTotalCount$, this.videoProvider.videoList$)
       (this.videoProvider.videoList$)
+      .pipe(takeUntil(this.destory$))
       .subscribe(x => {
         let videoList = x["2"];
         let videoTotalCount = x["1"];
         this.videoList = videoList;
         this.videoTotalCount = videoTotalCount;
-        console.log('zip...');
         this.scrollComplete();
       });
 
     this.searchTerms$.pipe(
+      takeUntil(this.destory$),
       // 延时以防止频繁请求
       debounceTime(500),
       // 舍弃那些参数没有变化的请求

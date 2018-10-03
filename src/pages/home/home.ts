@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { VideoListPage } from '../video-list/video-list';
@@ -9,6 +9,8 @@ import { LuckVideoRequest } from '../../domain/entity';
 import { VideoProvider } from '../../providers/video/video';
 import { VideoInfoPage } from '../video-info/video-info';
 import { SysProvider } from '../../providers/sys/sys';
+import { Subject } from 'rxjs/Subject';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Generated class for the HomePage page.
@@ -21,7 +23,13 @@ import { SysProvider } from '../../providers/sys/sys';
   selector: 'page-home',
   templateUrl: 'home.html',
 })
-export class HomePage {
+export class HomePage implements OnDestroy {
+
+  powerOffTip: string = '定时关机';
+  powerOffTimeTip: string = '';
+  isWaitPowerOff: boolean = false;
+
+  private destory$ = new Subject();
 
   constructor(
     public localStorage: LocalStorgeProvider,
@@ -32,18 +40,51 @@ export class HomePage {
     private sysProvider: SysProvider) {
   }
 
+  ngOnDestroy(): void {
+    this.destory$.next();
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
+    this.sysProvider.powerState$
+      .pipe(takeUntil(this.destory$))
+      .subscribe(x => {
+        if (x != null) {
+          this.powerOffTimeTip = x.msg;
+          // 因为会每秒调用，防止重复设置
+          if (this.isWaitPowerOff != true) {
+            this.isWaitPowerOff = true;
+            this.powerOffTip = '撤消关机';
+          }
+        } else {
+          this.isWaitPowerOff = false;
+          this.powerOffTip = '定时关机';
+          this.powerOffTimeTip = '';
+        }
+      });
+    this.sysProvider.checkShutdownInfo();
   }
 
   powerOff(): void {
+    if (this.isWaitPowerOff) {
+      this.cancelPowerOff();
+    } else {
+      this.doPowerOff();
+    }
+  }
+
+  private cancelPowerOff(): void {
+    this.sysProvider.cancelShutdown();
+  }
+
+  private doPowerOff(): void {
     const confirm = this.alertCtrl.create({
       title: '提示',
       message: '多少久后关闭系统(分)?',
       inputs: [
         {
           name: 'minute',
-          placeholder: '请输入秒数',
+          placeholder: '请输入分钟数',
           value: '1'
         }
       ],
@@ -57,16 +98,8 @@ export class HomePage {
         {
           text: '确认',
           handler: (data) => {
-            //TODO: 取消关机功能
-            var second = parseInt(data.minute) * 60;
-            this.sysProvider.shutdownServer(second)
-              .subscribe(x => {
-                this.alertCtrl.create({
-                  title: '提示',
-                  subTitle: `系统将大约在${data.minute}分后关机。`,
-                  buttons: ['知道了']
-                }).present();
-              });
+            let second = parseInt(data.minute) * 60;
+            this.sysProvider.shutdownServer(second);
           }
         }
       ]
@@ -116,6 +149,9 @@ export class HomePage {
     this.openVideoList('history');
   }
 
+  videoListByRandom(): void {
+    this.openVideoList('random');
+  }
   private openVideoList(loadType: string): void {
     this.navCtrl.push(VideoListPage, {
       type: loadType

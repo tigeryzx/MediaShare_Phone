@@ -1,4 +1,6 @@
-export const BASE_API_ROOT = 'http://s.tiger.cn:21021/api';
+import { ENV } from "@app/env";
+
+export const BASE_API_ROOT = ENV.apiRoot;
 
 export const USER_LOGIN = BASE_API_ROOT + '/TokenAuth/Authenticate';
 
@@ -15,6 +17,8 @@ export const FAV_DELETE = BASE_API_ROOT + '/services/app/Fav/Delete';
 export const FAV_LIKE_VIDEO = BASE_API_ROOT + '/services/app/Fav/FavoriteVideo';
 export const FAV_UNLIKE_VIDEO = BASE_API_ROOT + '/services/app/Fav/UnFavoriteVideo';
 
-export const SYS_SHUTDOWN_SERVER = BASE_API_ROOT + '/services/app/Sys/ShutDownServer';
+export const SYS_SHUTDOWN_SERVER = BASE_API_ROOT + '/services/app/Sys/ShutdownServer';
+export const SYS_CANCEL_SHUTDOWN = BASE_API_ROOT + '/services/app/Sys/CancelShutdown';
+export const SYS_GET_SHUTDOWN_DATE = BASE_API_ROOT + '/services/app/Sys/GetShutdownDate';
 
 export const IMG_GETIMAGE = BASE_API_ROOT + '/Image/GetImage';

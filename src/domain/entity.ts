@@ -90,6 +90,7 @@ export class VideoPageRequest {
     isHotPlay: boolean;
     isLatePlay: boolean;
     isHistoryView: boolean;
+    isRandomList: boolean;
 }
 
 export class FavoriteVideoChangeRequest {
@@ -129,4 +130,12 @@ export class VideoViewRequest {
 
     videoId: number;
     isPlay: boolean;
+}
+
+export class PowerOffState {
+    constructor() {
+
+    }
+    msg: string;
+    powerOffDate: Date;
 }

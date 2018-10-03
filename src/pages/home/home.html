@@ -55,16 +55,24 @@
       <ion-col col-6>
         <div class="menu-content" (click)="getLuckVideo()">
           <ion-icon name="happy"></ion-icon>
+          <div>手气不错</div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+        <div class="menu-content" (click)="videoListByRandom()">
+          <ion-icon name="shuffle"></ion-icon>
           <div>随便看看</div>
         </div>
       </ion-col>
     </ion-row>
-
     <ion-row>
       <ion-col col-6 (click)="powerOff()">
         <div class="menu-content">
           <ion-icon name="power"></ion-icon>
-          <div>定时关机</div>
+          <div> {{powerOffTip}}</div>
+          <div>{{powerOffTimeTip}}</div>
         </div>
       </ion-col>
       <ion-col col-6 (click)="longout()">
@@ -74,5 +82,6 @@
         </div>
       </ion-col>
     </ion-row>
+
   </ion-grid>
 </ion-content>

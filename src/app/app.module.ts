@@ -3,10 +3,6 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ItemDetailsPage } from '../pages/item-details/item-details';
-import { ListPage } from '../pages/list/list';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from '../pages/login/login';
@@ -25,19 +21,18 @@ import { FavProvider } from '../providers/fav/fav';
 import { ComponentsModule } from '../components/components.module';
 import { DateHelper } from '../util/date-helper';
 import { SysProvider } from '../providers/sys/sys';
+import { InfoPage } from '../pages/info/info';
 
 @NgModule({
   declarations: [
     MyApp,
-    HelloIonicPage,
-    ItemDetailsPage,
-    ListPage,
     LoginPage,
     HomePage,
     VideoListPage,
     VideoInfoPage,
     FavListPage,
-    FavInfoPage
+    FavInfoPage,
+    InfoPage
   ],
   imports: [
     HttpClientModule,
@@ -50,15 +45,13 @@ import { SysProvider } from '../providers/sys/sys';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HelloIonicPage,
-    ItemDetailsPage,
-    ListPage,
     LoginPage,
     HomePage,
     VideoListPage,
     VideoInfoPage,
     FavListPage,
-    FavInfoPage
+    FavInfoPage,
+    InfoPage
   ],
   providers: [
     StatusBar,
