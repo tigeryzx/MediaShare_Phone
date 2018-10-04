@@ -16,6 +16,7 @@ export class Image {
     isCover: boolean;
     id: number;
     url: string;
+    bigUrl: string;
 
     constructor() { }
 }

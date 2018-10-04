@@ -17,8 +17,8 @@
 
     <video-card [video]="currentVideo" [showActionButton]="true" (afterDelete)="afterDelete()"></video-card>
 
-    <ion-card *ngFor="let img of currentVideo.images" (press)="showMenu(img)">
-      <img [src]="img.url">
+    <ion-card *ngFor="let img of currentVideo.images;let i = index;" (press)="showMenu(img)" (click)="showBigImg(i)">
+      <img [src]="img.url" [class]="'gallery-' + i">
     </ion-card>
 
   </div>

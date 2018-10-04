@@ -106,13 +106,16 @@ export class VideoProvider {
         map(result => result.result)
       )
       .subscribe(video => {
-        this.currentVideo.coverUrl = this.getVideoImageUrl(videoCoverSetting.imageId);
+        this.currentVideo.coverUrl = this.getVideoImageUrl(videoCoverSetting.imageId, true);
       });
   }
 
-  getVideoImageUrl(imageId: number): string {
-    var maxWidth = window.document.body.clientWidth;
-    let url = IMG_GETIMAGE + `?imageId=${imageId}&maxWidth=${maxWidth}`;
+  getVideoImageUrl(imageId: number, isSmall: boolean): string {
+    let url = IMG_GETIMAGE + `?imageId=${imageId}`;
+    if (isSmall) {
+      var maxWidth = window.document.body.clientWidth;
+      url += `&maxWidth=${maxWidth}`;
+    }
     // 开发环境中使用测试图片
     if (ENV.mode == 'dev')
       url = '../../assets/imgs/video-default.png';
@@ -145,7 +148,8 @@ export class VideoProvider {
   private handleVideo(video: Video): Video {
     if (video.images && video.images.length > 0) {
       video.images.forEach(img => {
-        img.url = this.getVideoImageUrl(img.id);
+        img.url = this.getVideoImageUrl(img.id, true);
+        img.bigUrl = this.getVideoImageUrl(img.id, false);
         if (img.isCover)
           video.coverUrl = img.url;
       });
