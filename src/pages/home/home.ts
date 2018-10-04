@@ -4,13 +4,14 @@ import { LoginPage } from '../login/login';
 import { VideoListPage } from '../video-list/video-list';
 import { FavListPage } from '../fav-list/fav-list';
 import { LocalStorgeProvider } from '../../providers/local-storge/local-storage';
-import { USER_INFO } from '../../providers/local-storge/local-storage.namespace';
 import { LuckVideoRequest } from '../../domain/entity';
 import { VideoProvider } from '../../providers/video/video';
 import { VideoInfoPage } from '../video-info/video-info';
 import { SysProvider } from '../../providers/sys/sys';
 import { Subject } from 'rxjs/Subject';
 import { takeUntil } from 'rxjs/operators';
+import { SettingsProvider } from '../../providers/settings/settings';
+import { UserProvider } from '../../providers/user/user';
 
 /**
  * Generated class for the HomePage page.
@@ -28,7 +29,7 @@ export class HomePage implements OnDestroy {
   powerOffTip: string = '定时关机';
   powerOffTimeTip: string = '';
   isWaitPowerOff: boolean = false;
-
+  
   private destory$ = new Subject();
 
   constructor(
@@ -37,7 +38,9 @@ export class HomePage implements OnDestroy {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    private sysProvider: SysProvider) {
+    private sysProvider: SysProvider,
+    private settingsProvider: SettingsProvider,
+    private userProvider:UserProvider) {
   }
 
   ngOnDestroy(): void {
@@ -122,7 +125,7 @@ export class HomePage implements OnDestroy {
         {
           text: '注销',
           handler: () => {
-            this.localStorage.clear(USER_INFO);
+            this.userProvider.logout();
             this.navCtrl.setPages([{
               page: LoginPage
             }]);
@@ -160,6 +163,10 @@ export class HomePage implements OnDestroy {
 
   favList(): void {
     this.navCtrl.push(FavListPage);
+  }
+
+  switchTheme(): void {
+    this.settingsProvider.switchTheme();
   }
 
   getLuckVideo(): void {

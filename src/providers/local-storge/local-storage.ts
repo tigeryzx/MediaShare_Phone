@@ -19,15 +19,23 @@ export class LocalStorgeProvider {
     return JSON.parse(ls.getItem(key)) as T;
   }
 
+  public getString(key: string): string {
+    return ls.getItem(key);
+  }
+
+  public setString(key: string, value: any): void {
+    ls.setItem(key, value);
+  }
+
   public getList<T>(key: string) {
     const before = ls.getItem(key);
     return before ? (JSON.parse(before) as T[]) : [];
   }
 
   public set(key: string, value: any): void {
-    if (!value && value === undefined) { 
+    if (!value && value === undefined) {
       ls.setItem(key, null);
-      return; 
+      return;
     }
     const arr = JSON.stringify(value);
     ls.setItem(key, arr);

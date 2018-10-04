@@ -22,6 +22,7 @@ import { ComponentsModule } from '../components/components.module';
 import { DateHelper } from '../util/date-helper';
 import { SysProvider } from '../providers/sys/sys';
 import { InfoPage } from '../pages/info/info';
+import { SettingsProvider } from '../providers/settings/settings';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { InfoPage } from '../pages/info/info';
     HttpHelper,
     FavProvider,
     DateHelper,
-    SysProvider
+    SysProvider,
+    SettingsProvider
   ]
 })
 export class AppModule { }

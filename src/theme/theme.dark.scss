@@ -1,0 +1,72 @@
+  $default-font-color:#77767B;
+
+  $header-bg-color:#1E1E20;
+  $header-font-color:#E1E1E3;
+
+  $content-bg-color:rgb(46, 45, 51);
+  $item-bg-color:#232227;
+  $item-sliding-bg-color:#6b6a6a;
+
+  $search-box-bg:#727275;
+  $fab-bg:#3e4042;
+
+.dark-theme {
+  color: #77767B;
+  
+    ion-title{
+      background-color: $header-bg-color;
+      .toolbar-title{
+        color: $header-font-color;
+      }
+    }
+
+    ion-content {
+      background-color: $content-bg-color;      
+    }
+    ion-item-sliding.item-wrapper{
+        background-color: $item-sliding-bg-color;
+    }
+
+    ion-item.item.item-block {
+      background-color: $item-bg-color;
+      color:$default-font-color;
+      border-color: #626167;
+    }
+
+    .row ion-col .menu-content{
+      background-color: $item-bg-color;
+      color: $default-font-color;
+    }
+
+    ion-icon{
+      color: $default-font-color;
+    }
+
+    ion-card{
+      background-color: $item-bg-color;
+      ion-card-title{
+        color: $default-font-color;
+      }
+    }
+    ion-searchbar{
+      .searchbar-input-container{
+        .searchbar-input{
+          background-color: $search-box-bg;
+        }
+      }
+    }
+    .fab-ios-primary{
+      background-color: $fab-bg;
+    }
+
+    ion-badge{
+      background: $content-bg-color;
+      color: $default-font-color;
+    }
+
+    ion-footer{
+      .toolbar-background{
+        background-color:$header-bg-color;
+      }
+    }
+  }
