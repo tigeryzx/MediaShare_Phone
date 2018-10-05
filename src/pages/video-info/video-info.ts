@@ -62,7 +62,7 @@ export class VideoInfoPage {
       return;
 
     var pswpElement = document.querySelectorAll('.pswp')[0];
-
+this.mainContent.getNativeElement()
     // define options (if needed)
     var options = {
       shareEl: false,
