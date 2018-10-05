@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from '../pages/login/login';
 import { SettingsProvider } from '../providers/settings/settings';
+import { ConfigProvider } from '../providers/config/config';
 
 
 @Component({
@@ -23,9 +24,14 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private settingsProvider: SettingsProvider
+    private settingsProvider: SettingsProvider,
+    private configProvider: ConfigProvider
   ) {
-    this.initializeApp();
+      // 加载配置
+      this.configProvider.loadAppConfig()
+      .subscribe(config=>{
+        this.initializeApp();
+      });
   }
 
   initializeApp() {

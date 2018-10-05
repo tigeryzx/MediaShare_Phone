@@ -11,6 +11,7 @@ import { UserInfo } from '../domain/entity';
 import { LoginPage } from '../pages/login/login';
 import { DateHelper } from '../util/date-helper';
 import { USER_LOGIN } from '../providers/api';
+import { ConfigProvider } from '../providers/config/config';
 
 @Injectable()
 export class InterceptorService implements HttpInterceptor {
@@ -22,7 +23,8 @@ export class InterceptorService implements HttpInterceptor {
         private alertCtrl: AlertController,
         private localstorage: LocalStorgeProvider,
         private dateHelper: DateHelper,
-        public appCtrl: App) {
+        public appCtrl: App,
+        private configProvider: ConfigProvider) {
 
     }
 
@@ -46,14 +48,21 @@ export class InterceptorService implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-        let authReq: HttpRequest<any> = req;
+
+        var newUrl = req.url;
+        if (req.url.indexOf('[API_ROOT]') != -1)
+            newUrl = newUrl.replace('[API_ROOT]', this.configProvider.getAppConfig().apiRoot);
+
+        let authReq: HttpRequest<any> = req.clone({
+            url: newUrl
+        });
 
         const userInfo = this.localstorage.get<UserInfo>(USER_INFO);
         if (userInfo && userInfo.accessToken && !this.dateHelper.isExpireDate(userInfo.expireDate)) {
-            authReq = req.clone({
+            authReq = authReq.clone({
                 setHeaders: { Authorization: 'Bearer ' + userInfo.accessToken }
             });
-        } else {
+        } else if(userInfo && userInfo.accessToken && this.dateHelper.isExpireDate(userInfo.expireDate)) {
             if (req.url.toUpperCase().indexOf(USER_LOGIN.toUpperCase()) == -1) {
                 let activeNav: NavController = this.appCtrl.getActiveNav();
                 activeNav.push(LoginPage, {

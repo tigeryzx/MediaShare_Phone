@@ -1,6 +1,5 @@
-import { ENV } from "@app/env";
 
-export const BASE_API_ROOT = ENV.apiRoot;
+export let BASE_API_ROOT = '[API_ROOT]';
 
 export const USER_LOGIN = BASE_API_ROOT + '/TokenAuth/Authenticate';
 

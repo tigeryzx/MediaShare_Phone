@@ -140,3 +140,10 @@ export class PowerOffState {
     msg: string;
     powerOffDate: Date;
 }
+
+export class AppConfig {
+    constructor() {
+
+    }
+    apiRoot: string;
+}

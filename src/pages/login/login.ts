@@ -26,6 +26,7 @@ export class LoginPage {
     ) {
         this.loginType = navParams.get('loginType');
         if (this.loginType == 'relogin') {
+            this.userProvider.logout();
             this.showMsg('登录过期，请重新登录');
         } else if (this.loginType == 'shutdown') {
             this.showMsg('系统即将关闭了，就不要登录了。');

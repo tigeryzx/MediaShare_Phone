@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { HttpHelper } from '../../util/http-helper';
 import { Subject } from 'rxjs/Subject';
 import { ENV } from "@app/env";
+import { ConfigProvider } from '../config/config';
 
 /*
   Generated class for the VideoProvider provider.
@@ -26,7 +27,8 @@ export class VideoProvider {
 
   constructor(
     private http: HttpClient,
-    private httpHelper: HttpHelper) {
+    private httpHelper: HttpHelper,
+    private configProvider: ConfigProvider) {
     console.log('Hello VideoProvider Provider');
   }
 
@@ -111,7 +113,8 @@ export class VideoProvider {
   }
 
   getVideoImageUrl(imageId: number, isSmall: boolean): string {
-    let url = IMG_GETIMAGE + `?imageId=${imageId}`;
+    var imgRootPath = IMG_GETIMAGE.replace('[API_ROOT]', this.configProvider.getAppConfig().apiRoot);
+    let url = imgRootPath + `?imageId=${imageId}`;
     if (isSmall) {
       var maxWidth = window.document.body.clientWidth;
       url += `&maxWidth=${maxWidth}`;

@@ -23,6 +23,7 @@ import { DateHelper } from '../util/date-helper';
 import { SysProvider } from '../providers/sys/sys';
 import { InfoPage } from '../pages/info/info';
 import { SettingsProvider } from '../providers/settings/settings';
+import { ConfigProvider } from '../providers/config/config';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { SettingsProvider } from '../providers/settings/settings';
     FavProvider,
     DateHelper,
     SysProvider,
-    SettingsProvider
+    SettingsProvider,
+    ConfigProvider
   ]
 })
 export class AppModule { }
