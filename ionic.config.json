@@ -1,5 +1,7 @@
 {
   "name": "MediaSharePhone",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }
