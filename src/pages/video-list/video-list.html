@@ -27,7 +27,7 @@
     <span>没找到视频哦!</span>
   </div>
   <div *ngIf="videoList.length > 0">
-    <video-card [video]="video" *ngFor="let video of videoList" (click)="showVideoInfo(video)"></video-card>
+    <video-card [onlyShowCover]="true" [video]="video" *ngFor="let video of videoList" (tap)="showVideoInfo(video)"></video-card>
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="enableScrollLoad">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>

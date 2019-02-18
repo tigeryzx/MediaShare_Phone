@@ -24,7 +24,7 @@ export class ConfigProvider {
   }
 
   loadAppConfig(): Observable<AppConfig> {
-    let configUrl = '/assets/config/' + ENV.configFile;
+    let configUrl = 'assets/config/' + ENV.configFile;
     return this.http.get<AppConfig>(configUrl)
     .pipe(
       tap(result =>this.appConfig = result)

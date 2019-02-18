@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChild, Output, EventEmitter, OnInit } from '@angular/core';
 import { Video } from '../../domain/entity';
 import { AlertController } from 'ionic-angular';
 import { VideoProvider } from '../../providers/video/video';
@@ -14,12 +14,14 @@ import { FavSelectComponent } from '../fav-select/fav-select';
   selector: 'video-card',
   templateUrl: 'video-card.html'
 })
-export class VideoCardComponent {
+export class VideoCardComponent implements OnInit {
 
   @Input()
   video: Video;
   @Input()
-  showActionButton:boolean = false;
+  showActionButton: boolean = false;
+  @Input()
+  onlyShowCover: boolean = true;
 
   @Output()
   private afterDelete = new EventEmitter();
@@ -27,11 +29,15 @@ export class VideoCardComponent {
   @ViewChild(FavSelectComponent)
   favSelect: FavSelectComponent;
 
-
   constructor(
     private alertCtrl: AlertController,
     private videoProvider: VideoProvider
   ) {
+    
+  }
+
+  ngOnInit(): void {
+ 
   }
 
   delete(): void {

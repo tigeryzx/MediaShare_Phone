@@ -1,3 +1,3 @@
 {
-    "apiRoot": "http://s.tiger.cn:21021/api"
+    "apiRoot": "http://localhost:21021/api"
 }
