@@ -29,13 +29,16 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.initFav();
+  }
 
+  initFav() {
     if (this.video.favorite && this.video.favorite.length > 0) {
+      this.selFavs = [];
       this.video.favorite.forEach(selfav => {
         this.selFavs.push(selfav.id);
       });
     }
-
   }
 
   ngOnDestroy(): void {
@@ -94,6 +97,7 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
               addFavIds.forEach(favId => {
                 var fav = this.favs.find(fav => fav.id == favId);
                 this.video.favorite.push(fav);
+                this.initFav();
               });
             });
         }
@@ -106,6 +110,7 @@ export class FavSelectComponent implements AfterViewInit, OnDestroy {
                 var delFav = this.video.favorite.find(fav => fav.id == favId);
                 var favIndex = this.video.favorite.indexOf(delFav);
                 this.video.favorite.splice(favIndex, 1);
+                this.initFav();
               });
             });
         }

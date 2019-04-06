@@ -62,7 +62,7 @@ export class VideoInfoPage {
       return;
 
     var pswpElement = document.querySelectorAll('.pswp')[0];
-this.mainContent.getNativeElement()
+    this.mainContent.getNativeElement()
     // define options (if needed)
     var options = {
       shareEl: false,
@@ -79,7 +79,7 @@ this.mainContent.getNativeElement()
 
         // get position of element relative to viewport
         var rect = thumbnail.getBoundingClientRect();
-        
+
         // w = width
         return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
       }
